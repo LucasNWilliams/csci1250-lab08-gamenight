@@ -13,6 +13,8 @@ Directory.SetCurrentDirectory(projectFolder);
 string[] players = File.ReadAllLines(PLAYERS_FILE);
 string[] points = File.ReadAllLines(POINTS_FILE);
 
+Console.WriteLine();
+
 Console.Write("PLAYER".PadRight(PADDING));
 Console.WriteLine("POINTS");
 for (int i = 0; i < players.Length; i++)
@@ -24,6 +26,9 @@ int leaderIndex = LeaderIndex(points);
 Console.WriteLine($"Leader: {players[leaderIndex]} with {points[leaderIndex]}");
 Console.WriteLine("Season total: " + TotalPoints(points));
 
+UpdateAllPoints(players, points);
+
+Console.WriteLine();
 
 
 static int LeaderIndex(string[] points)
@@ -53,4 +58,32 @@ static int TotalPoints(string[] points)
     return total;
 }
 
-// static string HistroyEntry(int night, string winner, int points);
+// static string HistoryEntry(int night, string winner, int points);
+
+static void UpdateAllPoints(string[] players, string[] points)
+{
+    string[] pointsTonight = new string[players.Length];
+    for(int i = 0; i < players.Length; i++)
+    {
+        Console.Write($"Points tonight for {players[i]}: ");
+        int tonight = Convert.ToInt32(Console.ReadLine());
+
+        while(tonight > MAX_POINTS || tonight < 0)
+        {
+            Console.WriteLine("Points must be from 0 to 20");
+            Console.Write($"Points tonight for {players[i]}: ");
+            tonight = Convert.ToInt32(Console.ReadLine());
+        }
+
+        pointsTonight[i] = tonight.ToString();
+
+        int season = Convert.ToInt32(points[i]) + tonight;
+        points[i] = season.ToString();
+    }
+
+    int leaderIndex = LeaderIndex(pointsTonight);
+    Console.WriteLine($"Tonight's Winner: {players[leaderIndex]} with {pointsTonight[leaderIndex]}");
+    
+    File.WriteAllLines(POINTS_FILE, points);
+    Console.WriteLine("Saved " + POINTS_FILE);
+}
