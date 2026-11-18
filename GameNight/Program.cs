@@ -8,15 +8,14 @@
  *                  and adds tongiht's result to a histroy that grows every week.
  */
 
-
 const string PLAYERS_FILE = "players.txt";
 const string POINTS_FILE = "points.txt";
 const string HISTORY_FILE = "history.txt";
 const int MAX_POINTS = 20;
 const int PADDING = 11;
+const int HISTORY_PADDING = 2;
 
-string projectFolder = Path.GetFullPath(
-    Path.Combine(AppContext.BaseDirectory, "..", "..", ".."));
+string projectFolder = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", ".."));
 Directory.SetCurrentDirectory(projectFolder);
 
 
@@ -36,7 +35,7 @@ if (history.Length == 0)
     // foreach: Just need to write to console for each previous night. Index is unnecessary.
     foreach(string night in history)
     {
-        Console.WriteLine(night);
+        Console.WriteLine(night.PadLeft(HISTORY_PADDING));
     }
 }
 
@@ -45,14 +44,13 @@ Console.WriteLine($"Tonight is Night {tonightNumber}");
 
 // Part 1 //
 Console.WriteLine();
-Console.Write("PLAYER".PadRight(PADDING));
-Console.WriteLine("POINTS");
+Console.WriteLine("PLAYER".PadRight(PADDING) + "POINTS");
 // for: need to display the player and their points together, shared index is required as arrays are separate
 for (int i = 0; i < players.Length; i++)
 {
-    Console.Write(players[i].PadRight(PADDING));
-    Console.WriteLine(points[i]);
+    Console.WriteLine(players[i].PadRight(PADDING) + points[i]);
 }
+
 int leaderIndex = LeaderIndex(points);
 string leaderName = players[leaderIndex];
 string leaderPoints = points[leaderIndex];
@@ -62,6 +60,7 @@ Console.WriteLine();
 
 // Part 2
 string[] pointsTonight = new string[players.Length];
+
 // for: to save the points to their respective player, the index must be the same for each array
 for(int i = 0; i < players.Length; i++)
 {
